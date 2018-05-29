@@ -1,13 +1,67 @@
-## This projects implements the EIP1077
+This is a __React — Web3 — Solidity__ Proof of Concept signup / login design pattern with a minimal Ethereum native scheme that doesn't require passwords, backing up private keys nor typing seed phrases. It also allows for a user to sign messages to show intent of execution along similar guidelines.
 
-Add more info here!
+Contributors:
+Thomas
+Alejandro
+Rodo
+Buck
+Coogan
 
-To do:
+Table of Contents
+================= 
+  * [Inspiration](#headers)  
+  * [Pattern Overview](#overview)  
+  * [Client-Side](#client)  
+  * [Solidity](#solidity)  
+  * [Deployment](#deployment)  
 
---Refactor submit button to be a login ID creation
 
---Create new input below login ID creation that will show the credentials associated with the login ID (address, pulibc & private key)
+<a name="headers"/>
+Inspiration
+======
+The project is meant to propose creative solutions to UX challenges posed by naive users who are not familiar with private-public key pairs or the general Ethereum ecosystem.
 
---Create "action" buttons to generate a EIP-1077 data payload that contains the desired action-to-execute, the hash of the payload and the privately signed hash of the payload. (requires completion of below and incorporation of PrivateKeySign.js
+The design follows many of the guidelines outlined in [EIP-1077](https://github.com/ethereum/EIPs/pull/1077) and [ERC-1078](https://github.com/ethereum/EIPs/pull/1078). It is directly modeled on use cases presented by [Alex van de Sande at UX Unconference Toronto 2018](https://www.youtube.com/watch?v=qF2lhJzngto&feature=youtu.be).
 
---Create 1077 mock payload that can accept the possible actions from above button
+<a name="overview"/>
+Pattern Overview  
+======
+The pattern is divided into two sections. The __React client-side__ presents a simple login  to the user while abstracting away Web 3 details happening on the back-end. The __Solidity codebase__, maintained by a centralized server or master contract, receives input from the client and dynamically renders a proxy Identity Contract specific to the user.
+
+<a name="client"/>
+Client-side  
+======
+Upon receiving a text input, the client generates a new Ethereum address, which will be context-specific and etherless. It also generates a private-public key pair from the Ethereum address. That information is stored in `localStorage` in this JSON format:
+
+```
+{ "sampleUserID":
+  { account   : _account;
+    privateKey: _privateKey;
+    publicKey : _publicKey;
+  }
+}
+```
+
+The client then passes the new Ethereum account and key pair to a centralized server or master contract, which uses a factory pattern to generate an Identity Contract, which grants the user the permission to execute certain actions.
+
+Last, the client allows the user to choose an action in-browser, which is wrapped in a format adhering to EIP-1077 / EIP-191 standards, and deployed to the previously-created Identity Contract for verification and, if allowed, execution.
+
+<a name="solidity"/>
+Solidity  
+======== 
+The Solidity codebase located in `./contracts` contains `EIP1077.sol`, which provides two essential functions:
+
+* Generation of proxy Identity Contract
+* Verification of Identity and Execution of Permissioned Actions
+
+__`contract IdentityFactory`__ contains `createIdentity()`, which receives `account` (the new Ethereum address) and `pubKey` (the associated public key). *[Note: in the future, `r`, `s` and `v` will be extracted from pubKey before contract creation to optimize gas usage]* 
+
+__`contract Identity`__ stores `account`, `r`, `s`, `v` and `pubKey` in state. When it receives the EIP-1077 compliant message containing `messageHash` and `signedHash` from the client, it first verifies the signature by running `ECRecovery()` 
+
+Once identity has been confirmed, `Identity` emits an event according to the `operationType` specified in the EIP-1077 payload. An event listener will register the event and render it client-side as desired.
+
+
+<a name="deployment"/>
+Deployment  
+========
+This is a alpha Proof of Concept not meant to used on the Ethereum mainnet. Please fork, deploy locally or on testnet and submit PR or issues!
