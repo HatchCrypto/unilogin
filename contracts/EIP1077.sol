@@ -15,7 +15,6 @@ contract EIP1077Verifier {
     }
 }
 
-//TODO: check out the A
 contract IdentityFactory {
     mapping (address => address) accountToIdentity;
     
