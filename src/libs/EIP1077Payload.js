@@ -7,12 +7,13 @@
  */
 var web3 = require('web3');
 
-const EIP1077Payload = (from, to, dataHash, extraHash, callPrefix) => {
+const EIP1077Payload = (from, to, dataHash) => {
     //Validate input
 
     //address(this).call(bytes4(keccak256("moreThanFive(uint256)")), _value);
     const functionSignature = "verifySignature(bytes32,uint8,bytes32,bytes32)";
-    callPrefix = web3.utils.soliditySha3(functionSignature);
+    var callPrefix = web3.utils.soliditySha3(functionSignature);
+    var extraHash = "";
     
     //Temporarily leaving these as default
     const gasPrice = 0;
