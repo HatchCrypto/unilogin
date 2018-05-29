@@ -28,27 +28,28 @@ class Eip1077 extends Component {
     sendTransaction = () => {
        alert("send");
     }
-
     render(){
     return(
-    <div className="container">
-      <div className="row">
-        <p>Create a new login ID:</p>
-        <input type="text" value=""/>
-        <button onClick={this.sendTransaction}>Send</button>
+      <div className="container">
+        <div className="row">
+          <h1>Create a new login ID:</h1>
+          <input className="login-field" type="text" value=""/>
+          <br/>
+          <button className="login-btn" onClick={this.sendTransaction}>Send</button>
+        </div>
+        <div>
+          <p>Send your new account and public key to the factory contract:</p>
+          <input type="button" value="Create User ID contract"/>
+        </div>
+        <div>
+          <p>What action would you like to send along?</p>
+          <input className="action-btn" type="button" value="READ()"/>
+          <input className="action-btn" type="button" value="WRITE()"/>
+          <input className="action-btn" type="button" value="PING()"/>
+        </div>
       </div>
-     <div>
-      <p>Send your new account and public key to the factory contract:</p>
-      <input type="button" value="Create User ID contract"/>
-     </div>
-      <div>
-        <p>What action would you like to send along?</p>
-        <input type="button" value="READ()"/>
-        <input type="button" value="WRITE()"/>
-        <input type="button" value="PING()"/>
-      </div>
-    </div>
-    )}
+      )
+    }
 }
 
   export default Eip1077;
