@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import React, { Component } from 'react';
 import EIP1077Credentials from '../libs/EIP1077Credentials';
 import PrivateKeySign from './PrivateKeySign';
+import ethUtils from 'ethereumjs-util';
 
 const ABI = [];
 
