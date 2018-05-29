@@ -27,6 +27,7 @@ class Eip1077 extends Component {
       super(props)
       this.sendTransaction = this.sendTransaction.bind(this);
       this.createId = this.createId.bind(this);
+      this.sendAction = this.sendAction.bind(this);
       
     }
 
@@ -82,16 +83,18 @@ class Eip1077 extends Component {
            this.state.contract.methods.signTo(this.state.account, this.state.publicKey)
            .call()
            .then( response => console.log(response));
+       } else {
+           alert("Create Account First");
        }
     }
 
     render(){
     return(
     <div>
-      <h1>Send a signed transaction to Contract</h1>
+    <h1>Send a signed transaction to Contract</h1>
 
     <div>
-    <p>Create a new login ID:</p>
+    <p>1. Create a new login ID:</p>
     <input type="text" value={this.state.id} onChange={this.handleOnchangeId}/>
     <button onClick={this.createId}>Generate Credentials</button>
     </div>
@@ -103,19 +106,13 @@ class Eip1077 extends Component {
     <p>Public Key : {this.state.publicKey}</p>
     <p>Private Key: {this.state.privateKey}</p>
     </div>
-    //  1) Using the styling of EIP1077Credentials-Name, please make the input below a "sign-up" button
-    //  that intiates the creation of the EIP1077 Credentials using the inputted string as the localStorage
-    // setItem name.
 
+    <p>2. Sign up to Dapp:</p>
+    <p style={{fontSize:"10px"}}>Sends your new account and public key to the factory contract:</p>
     <button onClick={this.signUpToContract}>Sign up</button>
 
  
-
-     <div>
-     <p>Send your new account and public key to the factory contract:</p>
-     <input type="button" value="Create User ID contract"/>
-     </div>
-
+    <p>3. Send Actions:</p>
     // 3) Using the options below, generate a data payload that contains the
     // desired 'action to execute', the hash of that payload, and the signed hash
     // of that payload.
@@ -125,9 +122,9 @@ class Eip1077 extends Component {
 
     <div>
     <p>What action would you like to send along?</p>
-    <input type="button" value="READ()"/>
-    <input type="button" value="WRITE()"/>
-    <input type="button" value="PING()"/>
+    <input type="button" onClick={(e) => {this.sendAction("read")}} value="READ()"/>
+    <input type="button" onClick={(e) => {this.sendAction("write")}} value="WRITE()"/>
+    <input type="button" onClick={(e) => {this.sendAction("ping")}} value="PING()"/>
     </div>
 
   
