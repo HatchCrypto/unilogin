@@ -37,21 +37,22 @@ class Eip1077 extends Component {
         this.setState({account: account, publicKey: publicKey, privateKey: privateKey, contract: Contract});
     }
 
-    sendAction(action) {
+    sendAction(action, e) {
 
+        this.setState({transactionInfo: {}, action: 0});  
         // actions: 1=read,2=write,3=ping
         var payload = EIP1077Payload(this.state.account, CONTRACT_ADDRESS, action);
 
         // Gets transaction and signed transaction hashes
-        var {transactionHash, signedTransactionHash} = PrivateKeySign(payload, this.state.account, this.state.privateKey);
+        var hashes = PrivateKeySign(payload, this.state.account, this.state.privateKey);
         
         // Objet to send to Server/Contract
         const jsonObject = {
             _account: this.state.account,
-            _operationType: 1,
+            _operationType: action,
             _gas: 0,
-            _messageHash:transactionHash,
-            _signedHash:signedTransactionHash, 
+            _messageHash:hashes.transactionHash,
+            _signedHash:hashes.signedTransactionHash, 
         }
 
         // Send info to Contract
@@ -61,8 +62,8 @@ class Eip1077 extends Component {
                 this.state.account, 
                 action, 
                 0, 
-                transactionHash, 
-                signedTransactionHash)
+                hashes.transactionHash, 
+                hashes.signedTransactionHash)
             .call()
             .then( response => console.log(response));
             }   else {
@@ -128,9 +129,9 @@ class Eip1077 extends Component {
     <p>3. Send Actions:</p>
     <div>
     <p>What action would you like to send along?</p>
-    <input type="button" onClick={(e) => {this.sendAction(1)}} value="READ()"/>
-    <input type="button" onClick={(e) => {this.sendAction(2)}} value="WRITE()"/>
-    <input type="button" onClick={(e) => {this.sendAction(3)}} value="PING()"/>
+    <input type="button" onClick={(e) => {this.sendAction(11111)}} value="READ()"/>
+    <input type="button" onClick={(e) => {this.sendAction(22222)}} value="WRITE()"/>
+    <input type="button" onClick={(e) => {this.sendAction(32222)}} value="PING()"/>
     </div>
     <div>
         {JSON.stringify(this.state.transactionInfo)}
