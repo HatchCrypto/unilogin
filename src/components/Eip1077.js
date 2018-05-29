@@ -51,8 +51,9 @@ class Eip1077 extends Component {
             _account: this.state.account,
             _operationType: action,
             _gas: 0,
-            _messageHash:hashes.transactionHash,
+            _messageHash: hashes.transactionHash,
             _signedHash:hashes.signedTransactionHash, 
+            _payload: payload,
         }
 
         // Send info to Contract
@@ -93,7 +94,7 @@ class Eip1077 extends Component {
            .call()
            .then( response => console.log(response));
             } else {
-                alert("Sign up method not available in contract");
+                alert("Account: " + this.state.account + " with public key: " + this.toHexString(this.state.publicKey) + " wants to sign up. But 'Sign up' method not available in server or solidity contract");
         }
        } else {
            alert("Create Account First");
@@ -104,16 +105,16 @@ class Eip1077 extends Component {
 
     render(){
     return(
-    <div>
+    <div className="container">
     <h1>Send a signed transaction to Contract</h1>
 
-    <div>
+    <div className="row">
     <p>1. Create a new login ID:</p>
-    <input type="text" value={this.state.id} onChange={this.handleOnchangeId}/>
-    <button onClick={this.createId}>Generate Credentials</button>
+    <input className="login-field" type="text" value={this.state.id} onChange={this.handleOnchangeId}/>
+    <button className="login-btn" onClick={this.createId}>Generate Credentials</button>
     </div>
 
-    <div>
+    <div className="row">
     <h3>Your New Account Info:</h3>
     <p>Id : {this.state.id}</p>
     <p>Address : {this.state.account}</p>
@@ -134,7 +135,7 @@ class Eip1077 extends Component {
     <input type="button" onClick={(e) => {this.sendAction(32222)}} value="PING()"/>
     </div>
     <div>
-        {JSON.stringify(this.state.transactionInfo)}
+       <textarea value={JSON.stringify(this.state.transactionInfo)} style={{width:"400px", height:"200px"}}/>
     </div>
   
 
