@@ -2,7 +2,8 @@
 import Web3 from 'web3';
 import React, { Component } from 'react';
 import EIP1077Credentials from '../libs/EIP1077Credentials';
-import PrivateKeySign from './PrivateKeySign';
+import PrivateKeySign from '../libs/PrivateKeySign';
+import EIP1077Payload from '../libs/EIP1077Payload';
 import ethUtils from 'ethereumjs-util';
 
 const ABI = [];
@@ -45,25 +46,23 @@ class Eip1077 extends Component {
 
     sendAction(action) {
 
-        var bufferData = new Buffer(action);
-
-        const header = '0x19'
-        const version = '0'
-        const transactionHash = ethUtils.keccak256(header, version, this.state.account, action);
-
-       
-        var vrs = ethUtils.ecsign(transactionHash, this.state.privateKey);
-        var pubkey = ethUtils.ecrecover(transactionHash, vrs.v, vrs.r, vrs.s);
-        var b64encoded = this.toHexString(pubkey);
-
-        // Beware generated pubkey is Uncompressed and the publicKey is compressed
-        var pub1 = pubkey.slice(0,32);
-        var pub2 = this.state.publicKey.slice(1);
-        if (pub1.toString() === pub2.toString()){
-            console.log("They match!!");
-        }
+        var bufferedAction = buffer(action);
+        var payload = EIP1077Payload(this.state.account, CONTRACT_ADDRESS, bufferedAction);
+        var {transactionHash, signedTransactionHash} = PrivateKeySign(payload, this.state.account, this.state.privateKey);
         
         // Send Transaction to Contract
+        if (this.state.contract){
+            this.state.contract.methods.sendActionToContract(
+                this.state.account, 
+                action, 
+                0, 
+                transactionHash, 
+                signedTransactionHash)
+            .call()
+            .then( response => console.log(response));
+        } else {
+            alert("Create Account First");
+        }
     }
 
      toHexString(byteArray) {
@@ -74,8 +73,6 @@ class Eip1077 extends Component {
 
     handleOnchangeId = (e) => {
         this.setState({id: e.target.value});
-
-        // var { transactionHash, signedTransactionHash } = PrivateKeySign(0,0,this.bufferPrivateKey);
     }
 
     signUpToContract = () => {
