@@ -24,7 +24,7 @@ Inspiration
 =====
 The project is meant to propose creative solutions to UX challenges posed by naive users who are not familiar with private-public key pairs or the general Ethereum ecosystem.
   
-The design follows many of the guidelines outlined in [EIP-1077](https://github.com/ethereum/EIPs/pull/1077) and [ERC-1078](https://github.com/ethereum/EIPs/pull/1078). It is directly modeled on use cases presented by [Alex van de Sande at UX Unconference Toronto 2018](https://www.youtube.com/watch?v=qF2lhJzngto&feature=youtu.be).
+The design follows many of the guidelines outlined in [EIP-1077](https://github.com/ethereum/EIPs/pull/1077) and [ERC-1078](https://github.com/ethereum/EIPs/pull/1078). It is directly modeled on use cases presented by [Alex Van de Sande at UX Unconference Toronto 2018](https://www.youtube.com/watch?v=qF2lhJzngto&feature=youtu.be).
   
 
 Pattern Overview  
