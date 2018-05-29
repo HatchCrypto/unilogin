@@ -45,9 +45,9 @@ contract Identity {
     bytes32 s;
     uint8 v;
     
-    event Action1();
-    event Action2();
-    event Action3();
+    event Read();
+    event Write();
+    event Ping();
     
     constructor(address _account, bytes32 _pubKey) public {
         account = _account;
@@ -60,12 +60,12 @@ contract Identity {
     
         //Parse operationType & execute actions
         //TODO: Use function signatures to clean up code
-        if (_operationType == 1) {
-            action1();
-        } else if (_operationType == 2) {
-            action2();
-        } else if (_operationType == 3) {
-            action3();
+        if (_operationType == 11111) {
+            read();
+        } else if (_operationType == 22222) {
+            write();
+        } else if (_operationType == 32222) {
+            ping();
         } else {
             return false;
         }
@@ -77,15 +77,15 @@ contract Identity {
         emit events for the server to listen to 
     */ 
     
-    function action1() internal {
-        emit Action1();
+    function read() internal {
+        emit Read();
     }
     
-    function action2() internal {
-        emit Action2();
+    function write() internal {
+        emit Write();
     }
     
-    function action3() internal {
-        emit Action3();
+    function ping() internal {
+        emit Ping();
     }
 }
