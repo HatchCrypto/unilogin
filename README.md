@@ -1,3 +1,6 @@
+Effortless Ethereum Login employing EIP-1077 & ERC-1078
+================= 
+
 This is a __React — Web3 — Solidity__ Proof of Concept signup / login design pattern with a minimal Ethereum native scheme that doesn't require passwords, backing up private keys nor typing seed phrases. It also allows for a user to sign messages to show intent of execution along similar guidelines.
 
 Contributors:
