@@ -154,7 +154,7 @@ class Eip1077 extends Component {
     <input type="button" onClick={(e) => {this.sendAction(32222)}} value="PING()"/>
     </div>
     <div>
-       <textarea value={JSON.stringify(this.state.transactionInfo)} style={{width:"400px", height:"200px"}}/>
+       <textarea value={JSON.stringify(this.state.transactionInfo, undefined, 4)} style={{width:"700px", height:"500px"}}/>
     </div>
   
 
