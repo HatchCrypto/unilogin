@@ -10,9 +10,9 @@ var bitcore = require("bitcore-lib");
 const EIP1077Credentials = () => {
     if (window.localStorage.getItem("EIP1077Credentials") === null) {
         const KeyStore = new bitcore.HDPrivateKey();
-        const PrivateKey = KeyStore.privateKey.toString();
-        const Account = KeyStore.privateKey.toAddress().toString(); 
-        const PublicKey = KeyStore.privateKey.toPublicKey().toString();
+        const PrivateKey = KeyStore.privateKey.toBuffer();
+        const Account = toHexString(KeyStore.privateKey.toAddress().hashBuffer); 
+        const PublicKey = KeyStore.privateKey.toPublicKey({compressed:false}).toBuffer();
         var item = {account:Account, privateKey: PrivateKey, publicKey: PublicKey};
         window.localStorage.setItem("", JSON.stringify(item));
         return item;
@@ -20,5 +20,11 @@ const EIP1077Credentials = () => {
         return JSON.parse(window.localStorage.getItem("EIP1077Credentials"));
     }
 }
+
+function toHexString(byteArray) {
+    return Array.prototype.map.call(byteArray, function(byte) {
+      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+    }).join('');
+  }
 
 export default EIP1077Credentials;
