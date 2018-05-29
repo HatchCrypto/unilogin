@@ -7,9 +7,7 @@ import EIP1077Payload from '../libs/EIP1077Payload';
 import ethUtils from 'ethereumjs-util';
 
 const ABI = [];
-
 const web3 = new Web3(new Web3.providers.HttpProvider("https://localhost:8545"));
-
 const CONTRACT_ADDRESS = "";
 
 
@@ -22,6 +20,8 @@ class Eip1077 extends Component {
         data: "",
         contract: null,
         id: "",
+        transactionInfo : {},
+        action: 0,
       }
 
     constructor(props) {
@@ -29,12 +29,6 @@ class Eip1077 extends Component {
       this.createId = this.createId.bind(this);
       this.sendAction = this.sendAction.bind(this);
       
-    }
-
-    componentDidMount(){
-
-       
-        
     }
 
     createId(e){
@@ -45,13 +39,25 @@ class Eip1077 extends Component {
 
     sendAction(action) {
 
-        var bufferedAction = action.toBuffer();
-        var payload = EIP1077Payload(this.state.account, CONTRACT_ADDRESS, bufferedAction);
+        // actions: 1=read,2=write,3=ping
+        var payload = EIP1077Payload(this.state.account, CONTRACT_ADDRESS, action);
+
+        // Gets transaction and signed transaction hashes
         var {transactionHash, signedTransactionHash} = PrivateKeySign(payload, this.state.account, this.state.privateKey);
         
-        // Send Transaction to Contract
-        if (this.state.contract){
-            this.state.contract.methods.sendActionToContract(
+        // Objet to send to Server/Contract
+        const jsonObject = {
+            _account: this.state.account,
+            _operationType: 1,
+            _gas: 0,
+            _messageHash:transactionHash,
+            _signedHash:signedTransactionHash, 
+        }
+
+        // Send info to Contract
+        if (this.state.contract.methods){
+            if (this.state.contract.methods.EIP1077Request !== undefined){
+            this.state.contract.methods.EIP1077Request(
                 this.state.account, 
                 action, 
                 0, 
@@ -59,9 +65,14 @@ class Eip1077 extends Component {
                 signedTransactionHash)
             .call()
             .then( response => console.log(response));
+            }   else {
+                alert("EIP1077Request method not available in contract");
+            }
         } else {
             alert("Create Account First");
         }
+
+        this.setState({transactionInfo: jsonObject, action: action});         
     }
 
      toHexString(byteArray) {
@@ -75,10 +86,14 @@ class Eip1077 extends Component {
     }
 
     signUpToContract = () => {
-       if (this.state.contract){
+       if (this.state.contract && this.state.contract.methods){
+           if (this.state.contract.methods.signTo !== undefined){
            this.state.contract.methods.signTo(this.state.account, this.state.publicKey)
            .call()
            .then( response => console.log(response));
+            } else {
+                alert("Sign up method not available in contract");
+        }
        } else {
            alert("Create Account First");
        }
@@ -111,20 +126,15 @@ class Eip1077 extends Component {
 
  
     <p>3. Send Actions:</p>
-    // 3) Using the options below, generate a data payload that contains the
-    // desired 'action to execute', the hash of that payload, and the signed hash
-    // of that payload.
-    //
-    // To complete this, you must use PrivateKeySign component along with the EIP1077 payload
-    // component (still needs to be added)
-
     <div>
     <p>What action would you like to send along?</p>
-    <input type="button" onClick={(e) => {this.sendAction("read")}} value="READ()"/>
-    <input type="button" onClick={(e) => {this.sendAction("write")}} value="WRITE()"/>
-    <input type="button" onClick={(e) => {this.sendAction("ping")}} value="PING()"/>
+    <input type="button" onClick={(e) => {this.sendAction(1)}} value="READ()"/>
+    <input type="button" onClick={(e) => {this.sendAction(2)}} value="WRITE()"/>
+    <input type="button" onClick={(e) => {this.sendAction(3)}} value="PING()"/>
     </div>
-
+    <div>
+        {JSON.stringify(this.state.transactionInfo)}
+    </div>
   
 
     </div>
