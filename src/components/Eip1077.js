@@ -20,20 +20,26 @@ class Eip1077 extends Component {
         privateKey: null,
         data: "",
         contract: null,
+        id: "",
       }
 
     constructor(props) {
       super(props)
       this.sendTransaction = this.sendTransaction.bind(this);
+      this.createId = this.createId.bind(this);
       
     }
 
     componentDidMount(){
 
-        var { account, publicKey, privateKey} = EIP1077Credentials();
+       
+        
+    }
+
+    createId(e){
+        var { account, publicKey, privateKey} = EIP1077Credentials(this.state.id);
         const Contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS,{ from:account });
         this.setState({account: account, publicKey: publicKey, privateKey: privateKey, contract: Contract});
-        
     }
 
     sendTransaction() {
@@ -65,38 +71,45 @@ class Eip1077 extends Component {
         }).join('');
       }
 
-    handleOnchange = (e) => {
-        this.setState({data: e.target.value});
-        var { Account, PublicKey, PrivateKey} = EIP1077Credentials("coogan");
-        console.log()
-        const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS,{ from:Account });
+    handleOnchangeId = (e) => {
+        this.setState({id: e.target.value});
 
         // var { transactionHash, signedTransactionHash } = PrivateKeySign(0,0,this.bufferPrivateKey);
     }
 
-    sendTransaction = () => {
-       alert("send");
+    signUpToContract = () => {
+       if (this.state.contract){
+           this.state.contract.methods.signTo(this.state.account, this.state.publicKey)
+           .call()
+           .then( response => console.log(response));
+       }
     }
 
     render(){
     return(
     <div>
-      <p>Send a signed transaction to Contract</p>
-      <input type="text" value={this.state.data} onChange={this.handleOnchange}/>
-      <button onClick={this.sendTransaction}>Send</button>
+      <h1>Send a signed transaction to Contract</h1>
 
+    <div>
+    <p>Create a new login ID:</p>
+    <input type="text" value={this.state.id} onChange={this.handleOnchangeId}/>
+    <button onClick={this.createId}>Generate Credentials</button>
+    </div>
+
+    <div>
+    <h3>Your New Account Info:</h3>
+    <p>Id : {this.state.id}</p>
+    <p>Address : {this.state.account}</p>
+    <p>Public Key : {this.state.publicKey}</p>
+    <p>Private Key: {this.state.privateKey}</p>
+    </div>
     //  1) Using the styling of EIP1077Credentials-Name, please make the input below a "sign-up" button
     //  that intiates the creation of the EIP1077 Credentials using the inputted string as the localStorage
     // setItem name.
 
-    <div>
-    <p>Create a new login ID:</p>
-    <input type="text" value=""/>
-    <button onClick={this.sendTransaction}>Send</button>
-    </div>
+    <button onClick={this.signUpToContract}>Sign up</button>
 
-   // 2) Below, display a JSON object containing login ID, the Ethereum address and public key
-   // that will be used to generate a user ID contract
+ 
 
      <div>
      <p>Send your new account and public key to the factory contract:</p>
@@ -116,6 +129,8 @@ class Eip1077 extends Component {
     <input type="button" value="WRITE()"/>
     <input type="button" value="PING()"/>
     </div>
+
+  
 
     </div>
     )}
