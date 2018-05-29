@@ -37,8 +37,9 @@ class Eip1077 extends Component {
         this.setState({account: account, publicKey: publicKey, privateKey: privateKey, contract: Contract});
     }
 
-    sendAction(action) {
+    sendAction(action, e) {
 
+        this.setState({transactionInfo: {}, action: 0});  
         // actions: 1=read,2=write,3=ping
         var payload = EIP1077Payload(this.state.account, CONTRACT_ADDRESS, action);
 
@@ -48,7 +49,7 @@ class Eip1077 extends Component {
         // Objet to send to Server/Contract
         const jsonObject = {
             _account: this.state.account,
-            _operationType: 1,
+            _operationType: action,
             _gas: 0,
             _messageHash:transactionHash,
             _signedHash:signedTransactionHash, 
