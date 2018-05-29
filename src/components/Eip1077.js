@@ -26,7 +26,6 @@ class Eip1077 extends Component {
 
     constructor(props) {
       super(props)
-      this.sendTransaction = this.sendTransaction.bind(this);
       this.createId = this.createId.bind(this);
       this.sendAction = this.sendAction.bind(this);
       
@@ -46,7 +45,7 @@ class Eip1077 extends Component {
 
     sendAction(action) {
 
-        var bufferedAction = buffer(action);
+        var bufferedAction = action.toBuffer();
         var payload = EIP1077Payload(this.state.account, CONTRACT_ADDRESS, bufferedAction);
         var {transactionHash, signedTransactionHash} = PrivateKeySign(payload, this.state.account, this.state.privateKey);
         
