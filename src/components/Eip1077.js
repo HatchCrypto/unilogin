@@ -1,14 +1,8 @@
 
 import Web3 from 'web3';
 import React, { Component } from 'react';
-<<<<<<< HEAD
-import EIP1077Credentials, { toHexString } from '../libs/EIP1077Credentials';
-import ethUtils from 'ethereumjs-util';
-
-=======
 import EIP1077Credentials from '../libs/EIP1077Credentials';
 import PrivateKeySign from './PrivateKeySign';
->>>>>>> 36c19c94e103fa5b5a0080b37d203a8156e43de1
 
 const ABI = [];
 
@@ -35,7 +29,6 @@ class Eip1077 extends Component {
 
     componentDidMount(){
 
-<<<<<<< HEAD
         var { account, publicKey, privateKey} = EIP1077Credentials();
         const Contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS,{ from:account });
         this.setState({account: account, publicKey: publicKey, privateKey: privateKey, contract: Contract});
@@ -73,7 +66,6 @@ class Eip1077 extends Component {
 
     handleOnchange = (e) => {
         this.setState({data: e.target.value});
-=======
         var { Account, PublicKey, PrivateKey} = EIP1077Credentials("coogan");
         console.log()
         const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS,{ from:Account });
@@ -83,17 +75,14 @@ class Eip1077 extends Component {
 
     sendTransaction = () => {
        alert("send");
->>>>>>> 36c19c94e103fa5b5a0080b37d203a8156e43de1
     }
 
     render(){
     return(
     <div>
-<<<<<<< HEAD
       <p>Send a signed transaction to Contract</p>
       <input type="text" value={this.state.data} onChange={this.handleOnchange}/>
       <button onClick={this.sendTransaction}>Send</button>
-=======
 
     //  1) Using the styling of EIP1077Credentials-Name, please make the input below a "sign-up" button
     //  that intiates the creation of the EIP1077 Credentials using the inputted string as the localStorage
@@ -127,7 +116,6 @@ class Eip1077 extends Component {
     <input type="button" value="PING()"/>
     </div>
 
->>>>>>> 36c19c94e103fa5b5a0080b37d203a8156e43de1
     </div>
     )}
 }
