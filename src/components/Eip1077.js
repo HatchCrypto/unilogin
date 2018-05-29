@@ -9,7 +9,7 @@ import ethUtils from 'ethereumjs-util';
 
 const ABI = [];
 const web3 = new Web3(new Web3.providers.HttpProvider("https://localhost:8545"));
-const CONTRACT_ADDRESS = "";
+const CONTRACT_ADDRESS = "0x6adD67320A0D86F65B2f8e0bD24F2576f49fC5A4";
 
 
 class Eip1077 extends Component {
@@ -44,12 +44,16 @@ class Eip1077 extends Component {
         // actions: 1=read,2=write,3=ping
         var payload = EIP1077Payload(this.state.account, CONTRACT_ADDRESS, action);
 
+        var transactionHash = this.toByteArray(payload).slice(1);
+        var bufferedHash = new Buffer(transactionHash);
+
         // Gets transaction and signed transaction hashes
-        var hashes = PrivateKeySign(payload, this.state.account, this.state.privateKey);
+        var hashes = PrivateKeySign(payload, this.state.account, this.state.privateKey, bufferedHash);
         
         // Objet to send to Server/Contract
         const jsonObject = {
-            _account: this.state.account,
+            _to: CONTRACT_ADDRESS,
+            _from: this.state.account,
             _operationType: action,
             _gas: 0,
             _messageHash: hashes.transactionHash,
@@ -78,10 +82,24 @@ class Eip1077 extends Component {
         this.setState({transactionInfo: jsonObject, action: action});         
     }
 
-     toHexString(byteArray) {
+    stringToArray(bufferString) {
+        let uint8Array = new TextEncoder("utf-8").encode(bufferString);
+        return uint8Array;
+    }
+
+    toHexString(byteArray) {
         return Array.prototype.map.call(byteArray, function(byte) {
           return ('0' + (byte & 0xFF).toString(16)).slice(-2);
         }).join('');
+      }
+
+    toByteArray(hexString) {
+        var result = [];
+        while (hexString.length >= 2) {
+          result.push(parseInt(hexString.substring(0, 2), 16));
+          hexString = hexString.substring(2, hexString.length);
+        }
+        return result;
       }
 
     handleOnchangeId = (e) => {
