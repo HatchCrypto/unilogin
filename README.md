@@ -3,12 +3,12 @@ Effortless Ethereum Login via EIP-1077 & ERC-1078
 
 This is a __React — Web3 — Solidity__ Proof of Concept signup / login design pattern with a minimal Ethereum native scheme that doesn't require passwords, backing up private keys nor typing seed phrases. It also allows for a user to sign messages to show intent of execution along similar guidelines.
 
-Contributors:
-Thomas  
-Alejandro  
-Rodo  
-Buck  
-Coogan  
+Contributors:  
+[tspoff](https://github.com/tspoff)  
+[toledoal](https://github.com/toledoal)  
+[rodocite](https://github.com/rodocite)  
+[buck3000](https://github.com/buck3000)  
+[cooganb](https://github.com/cooganb)  
 
 Table of Contents
 ================= 
@@ -60,7 +60,7 @@ The Solidity codebase located in `./contracts` contains `EIP1077.sol`, which pro
   
 __`contract IdentityFactory`__ contains `createIdentity()`, which receives `account` (the new Ethereum address) and `pubKey` (the associated public key). *[Note: in the future, `r`, `s` and `v` will be extracted from pubKey before contract creation to optimize gas usage]* 
   
-__`contract Identity`__ stores `account`, `r`, `s`, `v` and `pubKey` in state. When it receives the EIP-1077 compliant message containing `messageHash` and `signedHash` from the client, it first verifies the signature by running `ECRecovery()` 
+__`contract Identity`__ stores `account`, `r`, `s`, `v` and `pubKey` in state. When it receives the EIP-1077 compliant message containing `messageHash` and `signedHash` from the client, it first verifies the signature came from original account using elliptic cryptographic methods.
   
 Once identity has been confirmed, `Identity` emits an event according to the `operationType` specified in the EIP-1077 payload. An event listener will register the event and render it client-side as desired.
   
