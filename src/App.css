@@ -26,3 +26,58 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+body{
+  background: url("./spiration-light.png");
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.container{
+  width: 95%;
+  margin-left: 2.5%;
+  text-align: center;
+}
+
+h1{
+  text-transform: uppercase;
+}
+
+input[type="button"]{
+  padding: 10px;
+  border-radius: 5px;
+  color: #333;
+  background-color: #fff;
+  border: 2px solid #ccc;
+}
+
+input[type="button"]:hover{
+  color: #fff;
+  background-color: #333;
+  border-color: #ccc;
+}
+
+.action-btn{
+  margin-right: 2.5%;
+}
+
+.login-field{
+  padding: 10px;
+  border-radius: 5px;
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.login-btn{
+  padding: 10px 25px;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #28a745;
+  border: 2px solid #28a745;
+  margin-top: 10px;
+}
+
+.login-btn:hover{
+  color: #28a745;
+  background-color: #fff;
+}
